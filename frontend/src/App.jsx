@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AuraReveal from './components/AuraReveal'; 
+const API_URL = import.meta.env.VITE_API_URL;
 
 // --- STYLES ---
 const cardStyle = {
@@ -701,7 +702,7 @@ const ChatBox = ({ history = [], setHistory, isLoading }) => {
     setHistory(currentHistory);
     setInput('');
     try {
-      const res = await fetch("http://localhost:8001/api/chat", {
+      const res = await fetch(`${API_URL}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: msg, history: currentHistory })
@@ -760,7 +761,7 @@ const Palmistry = ({ goBack, user }) => {
     formData.append("file", file);
     formData.append("user_name", username);
     try {
-      const res = await fetch("http://localhost:8001/api/palm/analyze", { method: "POST", body: formData });
+      const res = await fetch(`${API_URL}/api/palm/analyze`, { method: "POST", body: formData });
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
         throw new Error(errData.detail || "Error analyzing palm.");
@@ -819,7 +820,7 @@ const Tarot = ({ goBack, user }) => {
     if (!question.trim()) return alert("Please enter your question.");
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:8001/api/tarot/draw", {
+      const res = await fetch(`${API_URL}/api/tarot/draw`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_name: username, user_question: question.trim(), session_id: sessionId })
